@@ -29,13 +29,7 @@ use Psy\Exception\FatalErrorException;
  */
 class StaticConstructorPass extends CodeCleanerPass
 {
-    private $isPHP533;
     private $namespace;
-
-    public function __construct()
-    {
-        $this->isPHP533 = version_compare(PHP_VERSION, '5.3.3', '>=');
-    }
 
     public function beforeTraverse(array $nodes)
     {
@@ -54,8 +48,8 @@ class StaticConstructorPass extends CodeCleanerPass
         if ($node instanceof Namespace_) {
             $this->namespace = isset($node->name) ? $node->name->parts : array();
         } elseif ($node instanceof Class_) {
-            // Bail early if this is PHP 5.3.3 and we have a namespaced class
-            if (!empty($this->namespace) && $this->isPHP533) {
+            // Bail early if we have a namespaced class
+            if (!empty($this->namespace)) {
                 return;
             }
 
